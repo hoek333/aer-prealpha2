@@ -1,0 +1,9 @@
+set(SOURCES
+  _utils.cc
+  _utils.hh
+  input.cc
+  input.hh
+  input_x11.cc
+  input_x11.hh
+  key.hh
+)

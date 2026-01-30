@@ -30,18 +30,18 @@ FetchContent_Declare(
   SYSTEM
 )
 
-# FetchContent_Declare(
-#   SPSCQueue
-#   GIT_REPOSITORY https://github.com/rigtorp/SPSCQueue.git
-#   GIT_TAG v1.1
-#   GIT_SHALLOW ON
-#   EXCLUDE_FROM_ALL
-#   SYSTEM
-# )
+FetchContent_Declare(
+  SPSCQueue
+  GIT_REPOSITORY https://github.com/rigtorp/SPSCQueue.git
+  GIT_TAG v1.1
+  GIT_SHALLOW ON
+  EXCLUDE_FROM_ALL
+  SYSTEM
+)
 
 FetchContent_MakeAvailable(spdlog)
 FetchContent_MakeAvailable(raylib)
-# FetchContent_MakeAvailable(SPSCQueue)
+FetchContent_MakeAvailable(SPSCQueue)
 
 # OS-dependent libs ---------------------------------------------------------- #
 
@@ -71,5 +71,6 @@ if(WIN32)
 endif()
 
 add_subdirectory(lib/core)
-add_subdirectory(lib/model)
+add_subdirectory(lib/game)
+add_subdirectory(lib/runtime)
 add_subdirectory(src)

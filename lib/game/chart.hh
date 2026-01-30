@@ -5,57 +5,48 @@
 namespace aer {
 
 
-  namespace chart {
+  enum struct ChartElementKind {
+    NONE,
+    NOTE,
+    BPM,
+    MARKER,
+  };
 
 
-    enum struct ElementKind {
-      NONE,
-      NOTE,
-      BPM,
-      MARKER,
-    };
+  struct ChartElement {
+    Fraction beat;
+    float timestamp;
+    ChartElementKind kind;
 
-
-    struct Element {
-      Fraction beat;
-      float timestamp;
-      ElementKind kind;
-
-      Fraction note_length;
-      float bpm;
-      std::string marker_name;
-    };
-
-
-  } // namespace chart
+    Fraction note_length;
+    float bpm;
+    std::string marker_name;
+  };
 
 
   /**
-   * @brief Get the length of a beat in ms with the provided BPM
-   * @param bpm
-   * @return length of a beat
+   * @class Chart
+   * @brief Representation of a chart.
+   *
    */
-  constexpr float bpm_to_ms(float bpm);
-
-
   class Chart {
   public:
     int lanes;
     float offset;
-    std::vector<chart::Element> elements;
+    std::vector<ChartElement> elements;
 
   public:
     /**
      * @brief Filter the chart's elements by element kind.
      * @param kind
      */
-    auto view_kind(chart::ElementKind kind);
+    auto view_kind(ChartElementKind kind);
 
     /**
      * @copydoc view_kind
      * @note This function returns a vector of references
      */
-    auto view_kind_vec(chart::ElementKind kind);
+    auto view_kind_vec(ChartElementKind kind);
 
     /**
      * @brief Get a view of the elements timestamped between from included and
@@ -66,13 +57,14 @@ namespace aer {
      * @param kind element kind
      */
     auto view_window(float from, float to,
-                     chart::ElementKind kind = chart::ElementKind::NONE);
+                     ChartElementKind kind = ChartElementKind::NONE);
+
     /**
      * @copydoc view_window
      * @note This function returns a vector of references
      */
     auto view_window_vec(float from, float to,
-                         chart::ElementKind kind = chart::ElementKind::NONE);
+                         ChartElementKind kind = ChartElementKind::NONE);
 
     /**
      * @brief Sort the elements by timestamp.
@@ -90,6 +82,14 @@ namespace aer {
      */
     void prepare();
   };
+
+
+  /**
+   * @brief Get the length of a beat in ms with the provided BPM
+   * @param bpm
+   * @return length of a beat
+   */
+  constexpr float bpm_to_ms(float bpm);
 
 
 } // namespace aer
