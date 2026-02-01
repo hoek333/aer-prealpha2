@@ -2,6 +2,18 @@
 #include <raylib.h>
 
 
+std::optional<double>
+aer::InputPlatformAdapter::get_timestamp(const std::atomic<Music> *music) {
+  std::optional<double> timestamp;
+  if (music != nullptr && IsMusicValid(*music)) {
+    timestamp = GetMusicTimePlayed(*music) * 1000;
+  } else {
+    timestamp = std::nullopt;
+  }
+  return timestamp;
+}
+
+
 aer::InputManager::InputManager(size_t queue_size, std::atomic<Music> *music)
     : music(music)
     , queue(queue_size)

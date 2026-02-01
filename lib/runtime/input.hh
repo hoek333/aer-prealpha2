@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <raylib.h>
 #include <rigtorp/SPSCQueue.h>
 #include <stop_token>
@@ -25,7 +26,7 @@ namespace aer {
     InputControllerKind controller;
     InputEventKind kind;
     uint8_t code;
-    double timestamp;
+    std::optional<double> timestamp;
   };
 
 
@@ -35,6 +36,12 @@ namespace aer {
    *
    */
   class InputPlatformAdapter {
+  protected:
+    /**
+     * @brief Attempts to get a timestamp
+     */
+    std::optional<double> get_timestamp(const std::atomic<Music> *music);
+
   public:
     virtual void poll_input(rigtorp::SPSCQueue<InputEvent> &queue,
                             const std::atomic<Music> *music) = 0;
@@ -66,12 +73,12 @@ namespace aer {
     void run(std::stop_token stop);
 
   public:
-    InputManager(size_t queue_size, std::atomic<Music> *music);
+    InputManager(size_t queue_size, std::atomic<Music> *music = nullptr);
 
     /**
-     * @brief Set the handler's adapter. You must do this before you begin
+     * @brief Set the manager's adapter. You must do this before you begin
      * polling.
-     * @param adapter Adapter that the handler should use
+     * @param adapter Adapter that the manager should use
      *
      * @thread-safe This is not thread-safe. Do not change the adapter while
      * polling.
@@ -81,7 +88,13 @@ namespace aer {
     }
 
     /**
-     * @brief Return the polling status of the handler
+     * @brief Set or replace the manager's Music pointer.
+     * @param music atomic Music pointer
+     */
+    void set_music(std::atomic<Music> *music) { this->music = music; }
+
+    /**
+     * @brief Return the polling status of the manager
      * @return true if currently polling input, false if not
      */
     bool is_polling() const { return polling; }

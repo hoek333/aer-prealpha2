@@ -61,7 +61,7 @@ void aer::InputX11Adapter::poll_input(rigtorp::SPSCQueue<InputEvent> &queue,
     x::XNextEvent(pimpl->display, &ev);
 
     // timestamp
-    double timestamp = GetMusicTimePlayed(*music) * 1000;
+    auto timestamp = get_timestamp(music);
 
     if (!is_raylib_window_focused()) {
       continue; // discard event if window is not focused

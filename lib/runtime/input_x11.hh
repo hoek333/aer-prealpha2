@@ -17,7 +17,7 @@ namespace aer {
   /**
    * @class InputX11Adapter
    * @brief Input polling device leveraging X11 + XI2. Requires X11; use this
-   * with @ref InputHandler
+   * with @ref InputManager
    *
    */
   class InputX11Adapter : public InputPlatformAdapter {
